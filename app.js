@@ -3,9 +3,11 @@ const router = require('./src/routes/api');
 
 const app = new express();
 
+const mongoose = require('mongoose');
+
 
 // Security Middleware  Import 
-
+const bodyParser= require('body-parser');
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
@@ -25,6 +27,8 @@ app.use(xss());
 
 app.use(hpp());
 
+app.use(bodyParser.json());
+
 // Request Rate Limiting 
 
 
@@ -34,6 +38,23 @@ const limiter = rateLimit({
 });
 
 app.use(limiter);
+
+
+
+// MongoDB DB Connection
+
+const URI = `mongodb://127.0.0.1:27017/Schools`;
+const OPTIONS ={user: "", pass: ""} 
+
+
+mongoose.connect(URI,OPTIONS,(error=>{
+   
+    error && console.log(error);
+
+    console.log("Connected to MongoDB");
+
+}))
+
 
 
 
